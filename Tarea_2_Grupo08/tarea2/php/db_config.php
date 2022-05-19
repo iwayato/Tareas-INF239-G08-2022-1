@@ -7,16 +7,10 @@
 
     // Revisamos el estado de la conexión en caso de errores.
     if(!$dbconn) {
-        echo 
-            '<div class="alert alert-danger">
-                <strong>Error:</strong> No se ha podido conectar con la base de datosD
-            </div>';
+        echo("No se ha podido conectar con la base de datos");
     }
     else {
-        echo
-            '<div class="alert alert-success" role="alert">
-                Conectado a la base de datos
-            </div>';
+        echo("Conectado a la base de datos \n");
     }
     /* Para incluir la configuración de este archivo en otro archivo .php utilice 
     <?php include $_SERVER['DOCUMENT_ROOT'].'/db_config.php'; ?>
