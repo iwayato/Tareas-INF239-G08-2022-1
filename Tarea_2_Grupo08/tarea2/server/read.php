@@ -1,5 +1,4 @@
 <?php
-
     require("../php/db_config.php");
 
     $email = $_POST['email'];
@@ -11,8 +10,8 @@
 
     if ($result) {
         echo("!Obtenido con Éxito!");
+        header("Location: ../html/frontpage.html");
     } else {
         echo("¡Error!");
     }
-      
 ?>
