@@ -1,9 +1,11 @@
 <?php
-    $function = $_GET["function"];
-    $comic_id = $_GET["id"];
-    if ($function == "delete") {
-        $sql = "delete from COMIC where ID = $comic_id";
-        mysql_query($sql);
-        header('Location: index.php?section=comic');
-    }
+    require("../php/db_config.php");
+
+    echo("<h1>Hello</h1>");
+    $id = $_GET["id"];
+    echo($id);
+
+    $sql = "delete from canciones where ID = $id";
+    pg_query($dbconn, $sql);
+    header('Location: ../html/CRUDcanciones.html');
 ?>
