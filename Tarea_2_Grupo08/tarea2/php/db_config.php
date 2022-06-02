@@ -12,6 +12,7 @@
     else {
         echo("Conectado a la base de datos \n");
     }
+    //Carlos estuvo aquí
     /* Para incluir la configuración de este archivo en otro archivo .php utilice 
     <?php include $_SERVER['DOCUMENT_ROOT'].'/db_config.php'; ?>
     */
