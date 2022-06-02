@@ -1,8 +1,9 @@
 <?php include '../include/navbar.html'; ?>
 
-    <h1 id="title" class="p-3 ms-4">CRUD Canciones</h1>
-
     <title>CRUD canciones</title>
+
+    <h1 id="title" class="p-3 ms-4">CRUD Canciones (Sólo Artistas)</h1>
+
 
     <div class="row justify-content-around">
         <div class="col-8 p-3">
@@ -32,6 +33,7 @@
 
             <div class="modal-body">
                 <form action="../server/createSong.php" method="post">
+
                     <input
                         type="text"
                         id="nombre"
@@ -40,21 +42,32 @@
                         placeholder="Nombre Canción">
                 
                     <br>
+                    <br>
                 
+                    <textarea
+                        id="letra"
+                        name="letra"
+                        rows="4" 
+                        cols="52">
+                    </textarea>
+                
+                    <br>
+                    <br>
+
                     <input
-                        type="text"
-                        id="album"
-                        name="album" required
+                        type="date"
+                        id="fecha_composicion"
+                        name="fecha_composicion"
                         size="50"
-                        placeholder="Albúm">
-                
+                        placeholder="Fecha de Composición">
+
+                    <br>
                     <br>
                 
                     <button type="submit">
                         <strong>Añadir Canción</strong>
                     </button>
     
-                    <br>
                 </form>
             </div>
 
@@ -76,7 +89,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col-2">Nombre</th>
-                        <th scope="col">Album</th>
+                        <th scope="col">Letra</th>
                         <th scope="col" style="width: 10%;">Editar/Borrar</th>
                     </tr>
                 </thead>

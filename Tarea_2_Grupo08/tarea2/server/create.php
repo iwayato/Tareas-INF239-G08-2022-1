@@ -6,8 +6,8 @@
     $apellido = $_POST['apellido'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    
-    $sql = "INSERT INTO personas(nombre, apellido, email, password) VALUES ('$nombre', '$apellido', '$email', '$password');";
+
+    $sql = "INSERT INTO personas(nombre, apellido, email, password, nombre_artistico, verificado, suscripcion_activa) VALUES ('$nombre', '$apellido', '$email', '$password', null, null, false);";
 
     $result = pg_query($dbconn, $sql);
     

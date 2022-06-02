@@ -3,9 +3,10 @@
     require("../php/db_config.php");
 
     $nombre = $_POST['nombre'];
-    $album = $_POST['album'];
-    
-    $sql = "INSERT INTO canciones(nombre, album) VALUES ('$nombre', '$album');";
+    $letra = $_POST['letra'];
+    $fecha_composicion = $_POST['fecha_composicion'];
+
+    $sql = "INSERT INTO canciones(nombre, letra, fecha_composicion) VALUES ('$nombre', '$letra', '$fecha_composicion');";
 
     $result = pg_query($dbconn, $sql);
     

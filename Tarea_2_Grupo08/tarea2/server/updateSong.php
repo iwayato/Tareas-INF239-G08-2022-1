@@ -3,7 +3,7 @@
 
     $id = $_GET["id"];
     $nuevoNombreCancion = $_POST["nombre"];
-    $nuevoNombreAlbum = $_POST["album"];
+    $nuevaLetra = $_POST["letra"];
     //$function = $_GET["function"];
 
     // if ($function == "edit") {
@@ -39,7 +39,7 @@
         //$edited_comic_name = $_POST["edited_comic_name"];
         //$edited_comic_album = $_POST["edited_comic_album"];
         //$comic_id = $_POST["id"];
-        $sql = "UPDATE canciones set nombre = '$nuevoNombreCancion', album = '$nuevoNombreAlbum' WHERE id = $id;";
+        $sql = "UPDATE canciones set nombre = '$nuevoNombreCancion', letra = '$nuevaLetra' WHERE id = $id;";
 
         pg_query($dbconn, $sql);
         header('Location: ../html/CRUDcanciones.html');
