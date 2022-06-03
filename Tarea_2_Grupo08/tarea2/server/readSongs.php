@@ -8,7 +8,7 @@
     while ($row = pg_fetch_row($result)){
         echo("<tr>");
 
-        for ($j = 0; $j < 3; $j++) { // we're expecting three attributes
+        for ($j = 0; $j < 4; $j++) { // we're expecting three attributes
             echo ("<td>".$row[$j]."</td>"); // gives the current item of the current attribute
         }
 
