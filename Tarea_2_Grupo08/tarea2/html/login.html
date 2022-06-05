@@ -1,0 +1,38 @@
+<?php include '../include/navbar_login.html'; ?>
+
+<title>Tiwal - Inicia Sesión</title>
+
+<div style = "
+    position: absolute;
+    width: 600px;
+    height: 285px;
+    top: calc(50% - 142.5px);
+    left: calc(50% - 300px)">
+    <div class="card">
+        <h5 class="card-header">Inicia Sesión</h5>
+        <div class="card-body">
+            <form action="../php/login.php" method="get">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input 
+                        type = "email"
+                        id = "email"
+                        name = "email" required
+                        class ="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input
+                        type = "password"
+                        id = "password"
+                        name = "password" required
+                        class ="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Inicia Sesión</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

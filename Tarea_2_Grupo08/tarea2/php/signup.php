@@ -1,12 +1,12 @@
 <?php
 
-    require("../php/db_config.php");
+    require("db_config.php");
 
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $password_hashed = password_hash($password,PASSWORD_BCRYPT);
+    $nombre = filter_var($_POST['nombre'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $apellido = filter_var($_POST['apellido'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $password = filter_var($_POST['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $password_hashed = password_hash($password, PASSWORD_BCRYPT);
 
     $sql = "SELECT * FROM personas WHERE email = '$email';";
     $result = pg_query($dbconn, $sql);
@@ -21,7 +21,7 @@
     
         if ($result) {
             echo("¡Guardado con éxito!");
-            header("Location: ../index.html");
+            header("Location: ../html/login.html");
         } else {
             echo("¡Error!");
         }

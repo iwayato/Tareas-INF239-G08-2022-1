@@ -1,0 +1,52 @@
+<?php include '../include/navbar_signup.html'; ?>
+
+<div style = "
+    position: absolute;
+    width: 600px;
+    height: 457px;
+    top: calc(50% - 228.5px);
+    left: calc(50% - 300px)">
+    <div class="card">
+        <h5 class="card-header">Regístrate</h5>
+        <div class="card-body">
+            <form action="../php/signup.php" method="post">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input 
+                        type = "text"
+                        id = "nombre"
+                        name = "nombre" required
+                        class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input 
+                        type = "text"
+                        id = "apellido"
+                        name = "apellido"
+                        class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input 
+                        type = "email"
+                        id = "email"
+                        name = "email" required
+                        class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input
+                        type = "password"
+                        id = "password"
+                        name = "password" required
+                        class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

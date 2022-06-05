@@ -1,0 +1,52 @@
+<?php include '../include/navbar_landpage.html'; ?>
+
+<title>Canciones</title>
+
+<h2 id="title" class="p-3 ms-4">Canciones</h2>
+
+<div class="container">
+    <br/>
+    <table id="songs_table" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Compositores</th>
+                <th>Álbum</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script type="application/javascript">
+
+    function addRecord(record) {
+        let songsTableBody = $('#songs_table > tbody');
+
+        let newRow = 
+            '<tr data-id="' + record.id + '">' +
+            '   <td>' + record.nombre + '</td>' +
+            '   <td>' + record.compositores + '</td>' +
+            '   <td>' + record.album + '</td>' +
+            '   <td><a href="perfilcancion.html">Perfil Canción</a></td>' +
+            '</tr>';
+
+        songsTableBody.append(newRow);
+    }
+
+    $(document).ready(function () {
+            $.get('../php/R_canciones.php', function (resp) {
+                let results = JSON.parse(resp);
+    
+                $.each(results, function (i, record) {
+                    addRecord(record);
+                });
+            });
+    });
+    
+</script>
+
+</body>
+</html>
