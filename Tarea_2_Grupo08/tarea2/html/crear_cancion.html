@@ -1,0 +1,177 @@
+<?php include '../include/navbar_crear_cancion.html'; ?>
+
+<title>Tiwal - Crear canción</title> 
+
+<h1 id="title" class="p-3 ms-4">Crear canción</h1>
+
+<div class="container">
+    <br/>
+    <table id="songs_table" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Letra</th>
+            <th>Fecha Composición</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <button id="nueva_cancion" class="btn btn-success">Nueva Canción</button>
+</div>
+
+<script type="application/javascript">
+    
+    function addRecord(record) 
+    {
+        let songsTableBody = $('#songs_table > tbody');
+
+        let newRow = 
+            '<tr data-id="' + record.id + '">' +
+            '   <td>' + record.nombre + '</td>' +
+            '   <td>' + record.letra + '</td>' +
+            '   <td>' + record.fecha_composicion + '</td>' +
+            '   <td><button class="btn btn-primary edit" onclick="editRecord($(this).closest(\'tr\'));">Editar</button></td>' +
+            '   <td><button class="btn btn-danger delete" onclick="deleteRecord($(this).closest(\'tr\'));">Borrar</button></td>' +
+            '</tr>';
+
+        songsTableBody.append(newRow);
+    }
+
+    function getEditRow(curRow)
+    {
+        return '<tr data-id="' + curRow.attr('data-id') + '">' +
+            '<td><input id="nombre" name="nombre" value="' + curRow.children()[0].textContent + '"/></td>' +
+            '<td><input id="letra" name="letra" value="' + curRow.children()[1].textContent + '"/></td>' +
+            '<td><input id="fecha_composicion" name="fecha_composicion" value="' + curRow.children()[2].textContent + '"/></td>' +
+            '<td><button id="edit_confirm" class="btn btn-success">Confirmar</button></td>' +
+            '<td><button id="edit_cancel" class="btn btn-secondary">Cancelar</td>' +
+            '</tr>';
+    }
+
+    function editRecord (curRow) 
+    {
+        let oldRow = curRow.clone();
+        let editRow = getEditRow(curRow);
+        let nextRow = curRow.next();
+        let songsTableBody = $('#songs_table > tbody');
+
+        curRow.remove();
+        if (nextRow.children().length) {
+            $(editRow).insertBefore(nextRow);
+        } else {
+            songsTableBody.append(editRow);
+        }
+
+        $('#edit_confirm').click(function () {
+            let curRow = $(this).closest('tr');
+            let id = curRow.attr('data-id');
+
+            let data = {
+                nombre: curRow.find('input[name="nombre"]').val(),
+                letra: curRow.find('input[name="letra"]').val(),
+                fecha_composicion: curRow.find('input[name="fecha_composicion"]').val(),
+            }
+
+            $.ajax('../php/CRUD_canciones.php?id=' + id, {
+                method: 'PUT',
+                data: data,
+                success: function() {
+                    curRow.remove();
+                    oldRow.children()[0].textContent = data.nombre;
+                    oldRow.children()[1].textContent = data.letra;
+                    oldRow.children()[2].textContent = data.fecha_composicion;
+
+                    if (nextRow.children().length) {
+                        $(oldRow).insertBefore(nextRow);
+                    } else {
+                        songsTableBody.append(oldRow);
+                    }
+                },
+                error: function( jqXHR, textStatus, errorThrown ) {
+                    alert(errorThrown);
+                }
+            });
+        });
+
+        $('#edit_cancel').click(function () {
+
+            $(this).closest('tr').remove();
+
+            if (nextRow.children().length) {
+                oldRow.insertBefore(nextRow);
+            } else {
+                songsTableBody.append(oldRow);
+            }
+        });
+    };
+
+    function deleteRecord(curRow)
+    {
+        let id = curRow.attr('data-id');
+        let nombre_cancion = curRow.children()[0].textContent;
+        if (confirm("Estas a punto de borrar " + nombre_cancion + " ¿Éstas seguro?")) {
+            $.ajax({
+                url: '../php/CRUD_canciones.php?id=' + id,
+                type: 'DELETE',
+                success: function (result) {
+                    curRow.remove();
+                },
+                error: function () {
+                    alert('Hubo un error en el servidor');
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        $.get('../php/CRUD_canciones.php', function (resp) {
+            let results = JSON.parse(resp);
+
+            $.each(results, function (i, record) {
+                addRecord(record);
+            });
+        });
+    });
+
+    $('#nueva_cancion').click(function () {
+        $('#nueva_cancion').prop('disabled', true);
+
+        $('#songs_table > tbody').append(
+            '<tr>' +
+            '<td><input id="nombre" name="nombre"/></td>' +
+            '<td><input id="letra" name="letra"/></td>' +
+            '<td><input id="fecha_composicion" name="fecha_composicion"/></td>' +
+            '<td><button id="confirm_new" class="btn btn-primary">Confirmar</button></td>' +
+            '<td><button id="cancel_new" class="btn btn-secondary">Cancelar</td>' +
+            '</tr>'
+        );
+
+        let newRow = $('#songs_table > tbody').children().last();
+
+        $('#confirm_new').click(function () {
+            let postData = {
+                nombre: $('#nombre').val(),
+                letra: $('#letra').val(),
+                fecha_composicion: $('#fecha_composicion').val()
+            };
+            $.post('../php/CRUD_canciones.php', postData, function(resp) {
+                newRow.remove();
+                postData.id = resp;
+                addRecord(postData);
+            });
+            $('#nueva_cancion').prop('disabled', false);
+        });
+
+        $('#cancel_new').click(function () {
+            newRow.remove();
+            $('#nueva_cancion').prop('disabled', false);
+        });
+    });
+    
+</script>
+
+</body>
+</html>
