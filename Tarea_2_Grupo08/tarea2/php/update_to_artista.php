@@ -15,5 +15,5 @@
     
     pg_query($dbconn, $sql);
 
-    header("Location: ../html/perfilusuario.html");
+    header("Location: ../html/perfilartista.html");
 ?>

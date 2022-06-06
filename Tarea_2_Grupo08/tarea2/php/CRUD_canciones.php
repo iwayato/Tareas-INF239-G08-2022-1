@@ -1,5 +1,4 @@
 <?php
-
 try {
     $host= 'localhost';
     $db = 'Tarea2_BD';
@@ -118,5 +117,4 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
 
         break;
 }
-
 ?>
