@@ -7,6 +7,8 @@ try {
     $password = 'iwayato';
     $dsn = "pgsql:host=$host;port=5432;dbname=$db;";
     $db = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    session_start();
+    $id_persona = $_SESSION["id_persona"];
 } catch (PDOException $exception) {
     die("Can't connect to the database: {$exception->getMessage()}");
 }
@@ -14,7 +16,19 @@ try {
 switch (strtolower($_SERVER['REQUEST_METHOD'])) 
 {
     case 'get':
-        $sql = 'SELECT * FROM canciones';
+
+        $sql = "
+            SELECT 
+                nombre, letra, fecha_composicion
+            FROM 
+                canciones
+            INNER JOIN
+                artista_compuso_cancion
+            ON
+                canciones.id = artista_compuso_cancion.id_cancion
+            WHERE
+                artista_compuso_cancion.id_artista =  $id_persona
+        ;";
 
         try {
             $st = $db->query($sql, PDO::FETCH_ASSOC);
@@ -26,7 +40,14 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
         break;
 
     case 'post':
-        $sql = "INSERT INTO canciones(nombre, letra, fecha_composicion) VALUES (:nombre, :letra, :fecha_composicion);";
+
+        $sql = "
+            WITH nueva_cancion as (
+                INSERT INTO canciones(nombre, letra, fecha_composicion) VALUES (:nombre, :letra, :fecha_composicion)
+                RETURNING id
+            )
+            INSERT INTO artista_compuso_cancion(id_artista, id_cancion) VALUES ($id_persona, (SELECT id FROM nueva_cancion))
+        ";
 
         $st = $db->prepare($sql);
 
@@ -51,7 +72,9 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
         }
 
         $sql = "DELETE FROM canciones WHERE id = :id";
+
         $st = $db->prepare($sql);
+        
         try {
             $st->execute([
                 'id' => $id,
@@ -75,6 +98,7 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
 
             die;
         }
+
         $sql = 'UPDATE canciones SET nombre = :nombre, letra = :letra, fecha_composicion = :fecha_composicion WHERE id = :id';
         $st = $db->prepare($sql);
 

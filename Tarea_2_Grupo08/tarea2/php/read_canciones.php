@@ -1,5 +1,4 @@
 <?php
-
     try {
         $host= 'localhost';
         $db = 'Tarea2_BD';
@@ -20,5 +19,4 @@
         http_response_code(500);
         die ("Can't execute query '$sql': '{$exception->getMessage()}'");
     }
-
 ?>

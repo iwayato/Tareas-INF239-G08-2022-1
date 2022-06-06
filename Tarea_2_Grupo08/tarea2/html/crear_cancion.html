@@ -112,7 +112,7 @@
     {
         let id = curRow.attr('data-id');
         let nombre_cancion = curRow.children()[0].textContent;
-        if (confirm("Estas a punto de borrar " + nombre_cancion + " ¿Éstas seguro?")) {
+        if (confirm("Estas a punto de borrar " + nombre_cancion + " ¿Estas seguro?")) {
             $.ajax({
                 url: '../php/CRUD_canciones.php?id=' + id,
                 type: 'DELETE',
