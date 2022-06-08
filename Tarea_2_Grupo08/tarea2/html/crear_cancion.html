@@ -11,6 +11,7 @@
         <tr>
             <th>Nombre</th>
             <th>Letra</th>
+            <th>ID Album</th>
             <th>Fecha Composición</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
@@ -32,6 +33,7 @@
             '<tr data-id="' + record.id + '">' +
             '   <td>' + record.nombre + '</td>' +
             '   <td>' + record.letra + '</td>' +
+            '   <td>' + record.id_album + '</td>' +
             '   <td>' + record.fecha_composicion + '</td>' +
             '   <td><button class="btn btn-primary edit" onclick="editRecord($(this).closest(\'tr\'));">Editar</button></td>' +
             '   <td><button class="btn btn-danger delete" onclick="deleteRecord($(this).closest(\'tr\'));">Borrar</button></td>' +
@@ -143,11 +145,14 @@
             '<tr>' +
             '<td><input id="nombre" name="nombre"/></td>' +
             '<td><input id="letra" name="letra"/></td>' +
+            '<td><input id="id_album" name="id_album"/></td>' +
             '<td><input id="fecha_composicion" name="fecha_composicion"/></td>' +
             '<td><button id="confirm_new" class="btn btn-primary">Confirmar</button></td>' +
             '<td><button id="cancel_new" class="btn btn-secondary">Cancelar</td>' +
             '</tr>'
         );
+
+        
 
         let newRow = $('#songs_table > tbody').children().last();
 
@@ -155,6 +160,7 @@
             let postData = {
                 nombre: $('#nombre').val(),
                 letra: $('#letra').val(),
+                id_album: $('#id_album').val(),
                 fecha_composicion: $('#fecha_composicion').val()
             };
             $.post('../php/CRUD_canciones.php', postData, function(resp) {

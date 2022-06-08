@@ -1,9 +1,9 @@
 <?php
 try {
     $host= 'localhost';
-    $db = 'Tarea2_BD';
+    $db = 'postgres';
     $user = 'postgres';
-    $password = 'iwayato';
+    $password = 'Usm5615004k';
     $dsn = "pgsql:host=$host;port=5432;dbname=$db;";
     $db = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     session_start();
@@ -40,14 +40,21 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
 
     case 'post':
 
+
         $sql = "
-            WITH nueva_cancion as (
-                INSERT INTO canciones(nombre, letra, fecha_composicion) VALUES (:nombre, :letra, :fecha_composicion)
-                RETURNING id
-            )
-            INSERT INTO artista_compuso_cancion(id_artista, id_cancion) VALUES ($id_persona, (SELECT id FROM nueva_cancion))
+        WITH nueva_cancion as (
+            INSERT INTO canciones(nombre, letra, fecha_composicion) VALUES (:nombre, :letra, :fecha_composicion)
+            RETURNING id
+        )
+        INSERT INTO artista_compuso_cancion(id_artista, id_cancion) VALUES ($id_persona, (SELECT id FROM nueva_cancion));
         ";
 
+        $sql2 = "WITH id_cancion as (
+                SELECT id FROM canciones WHERE nombre = :nombre AND letra = :letra AND fecha_composicion = :fecha_composicion
+                )
+				INSERT INTO album_tiene_cancion(id_album, id_cancion) VALUES (:id_album, (SELECT id from id_cancion))";
+
+        
         $st = $db->prepare($sql);
 
         try {
@@ -57,12 +64,35 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
                 'fecha_composicion' => $_POST['fecha_composicion'],
             ]);
 
+
+
             echo $db->lastInsertId();
         } catch (PDOException $exception) {
             http_response_code(500);
             die ($exception->getMessage());
         }
+
+        $st = $db->prepare($sql2);
+
+        try {
+            $st->execute([
+                'nombre' => $_POST['nombre'],
+                'letra' => $_POST['letra'],
+                'id_album' => $_POST['id_album'],
+                'fecha_composicion' => $_POST['fecha_composicion'],
+            ]);
+
+
+
+            echo $db->lastInsertId();
+        } catch (PDOException $exception) {
+            http_response_code(500);
+            die ($exception->getMessage());
+        }
+
         break;
+
+        
 
     case 'delete':
         if (empty($id = filter_input(INPUT_GET, 'id'))) {
@@ -118,4 +148,4 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
 
         break;
 }
-?>
+?>        

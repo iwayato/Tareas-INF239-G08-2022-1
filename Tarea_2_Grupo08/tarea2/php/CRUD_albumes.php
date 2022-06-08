@@ -1,9 +1,9 @@
 <?php
 try {
     $host= 'localhost';
-    $db = 'Tarea2_BD';
+    $db = 'postgres';
     $user = 'postgres';
-    $password = 'iwayato';
+    $password = 'Usm5615004k';
     $dsn = "pgsql:host=$host;port=5432;dbname=$db;";
     $db = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     session_start();
