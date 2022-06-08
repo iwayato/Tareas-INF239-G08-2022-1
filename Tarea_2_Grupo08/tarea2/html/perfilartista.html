@@ -48,10 +48,10 @@
 
                     <div class="row">
                         <div class="col-sm-3">
-                            <p class="mb-0">Suscripción</p>
+                            <p class="mb-0">¿Verificado?</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0" id="suscripcion"></p>
+                            <p class="text-muted mb-0" id="verificado"></p>
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
         let nombre = $('#nombre');
         let apellido = $('#apellido');
         let email = $('#email');
-        let suscripcion = $('#suscripcion');
+        let verificado = $('#verificado');
         let nombre_artista = $('#nombre_artista')
 
         nombre_completo.append(record.nombre + " " + record.apellido);
@@ -82,11 +82,11 @@
             nombre_artista.append("Usuario");
         }
 
-        if (record.suscripcion) {
-            suscripcion.append("Activa");
+        if (record.verificado) {
+            verificado.append("Verificado");
         }
         else {
-            suscripcion.append("Inactiva");
+            verificado.append("No Verificado");
         }
     }
 

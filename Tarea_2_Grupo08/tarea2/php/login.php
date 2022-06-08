@@ -17,8 +17,11 @@
         $_SESSION["id_persona"] = $row[0];
 
         if (isset($row[2])) {
+            $_SESSION["tipo_persona"] = "artista";
             header("Location: ../html/landpage_artista.html");
+
         } else {
+            $_SESSION["tipo_persona"] = "usuario";
             header("Location: ../html/landpage.html");
         }
 

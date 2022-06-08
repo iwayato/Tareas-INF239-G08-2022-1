@@ -17,16 +17,20 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
     case 'get':
 
         $sql = "
-            SELECT 
-                id, nombre, letra, fecha_composicion
+                SELECT 
+                id, nombre, letra, fecha_composicion, album_tiene_cancion.id_album
             FROM 
                 canciones
             INNER JOIN
                 artista_compuso_cancion
             ON
                 canciones.id = artista_compuso_cancion.id_cancion
+            INNER JOIN
+                album_tiene_cancion
+            ON
+                canciones.id = album_tiene_cancion.id_cancion
             WHERE
-                artista_compuso_cancion.id_artista = $id_persona
+                artista_compuso_cancion.id_artista = 24
         ;";
 
         try {

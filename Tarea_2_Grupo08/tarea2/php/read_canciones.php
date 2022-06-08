@@ -12,20 +12,29 @@ try {
 
 $sql = "
     SELECT 
-        canciones.nombre AS nombre, compositores.nombre AS compositores
+        canciones.nombre AS nombre, compositores.nombre AS compositores, album.nombre as nombre_album
     FROM 
         canciones
     INNER JOIN(
         SELECT 
-            personas.nombre as nombre, artista_compuso_cancion.id_cancion
+            personas.nombre_artistico as nombre, artista_compuso_cancion.id_cancion
         FROM 
             personas
         INNER JOIN
             artista_compuso_cancion
         ON
-            personas.id = artista_compuso_cancion.id_artista) as compositores
+            personas.id = artista_compuso_cancion.id_artista
+        ) as compositores
     ON
         canciones.id = compositores.id_cancion
+    INNER JOIN
+        album_tiene_cancion
+    ON
+        canciones.id = album_tiene_cancion.id_cancion
+    INNER JOIN
+        album
+    ON
+        album_tiene_cancion.id_album = album.id
 ;";
 
 try {

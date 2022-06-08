@@ -17,7 +17,7 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
     case 'get':
 
         $sql = "
-            SELECT 
+            SELECT DISTINCT ON (id)
                 id, nombre, imagen, fecha_lanzamiento
             FROM 
                 album

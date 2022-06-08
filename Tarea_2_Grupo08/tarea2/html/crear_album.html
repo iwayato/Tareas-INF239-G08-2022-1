@@ -10,6 +10,7 @@
     <table id="albums_table" class="table table-striped">
         <thead>
         <tr>
+            <th>ID</th>
             <th>Nombre</th>
             <th>Cover</th>
             <th>Fecha Lanzamiento</th>
@@ -32,6 +33,7 @@
 
         let newRow = 
             '<tr data-id="' + record.id + '">' +
+            '   <td>' + record.id + '</td>' +
             '   <td>' + record.nombre + '</td>' +
             '   <td>' + record.imagen + '</td>' +
             '   <td>' + record.fecha_lanzamiento + '</td>' +
@@ -46,9 +48,10 @@
     function getEditRow(curRow)
     {
         return '<tr data-id="' + curRow.attr('data-id') + '">' +
-            '<td><input id="nombre" name="nombre" value="' + curRow.children()[0].textContent + '"/></td>' +
-            '<td><input id="imagen" name="imagen" value="' + curRow.children()[1].textContent + '"/></td>' +
-            '<td><input id="fecha_lanzamiento" name="fecha_lanzamiento" value="' + curRow.children()[2].textContent + '"/></td>' +
+            '<td>' + curRow.children()[0].textContent + '</td>' +
+            '<td><input id="nombre" name="nombre" value="' + curRow.children()[1].textContent + '"/></td>' +
+            '<td><input id="imagen" name="imagen" value="' + curRow.children()[2].textContent + '"/></td>' +
+            '<td><input id="fecha_lanzamiento" name="fecha_lanzamiento" value="' + curRow.children()[3].textContent + '"/></td>' +
             '<td><button id="edit_confirm" class="btn btn-success">Confirmar</button></td>' +
             '<td><button id="edit_cancel" class="btn btn-secondary">Cancelar</td>' +
             '</tr>';
@@ -74,6 +77,7 @@
             let id = curRow.attr('data-id');
 
             let data = {
+                id: curRow.attr('data-id'),
                 nombre: curRow.find('input[name="nombre"]').val(),
                 imagen: curRow.find('input[name="imagen"]').val(),
                 fecha_lanzamiento: curRow.find('input[name="fecha_lanzamiento"]').val(),
@@ -84,9 +88,10 @@
                 data: data,
                 success: function() {
                     curRow.remove();
-                    oldRow.children()[0].textContent = data.nombre;
-                    oldRow.children()[1].textContent = data.imagen;
-                    oldRow.children()[2].textContent = data.fecha_lanzamiento;
+                    oldRow.children()[0].textContent = data.id;
+                    oldRow.children()[1].textContent = data.nombre;
+                    oldRow.children()[2].textContent = data.imagen;
+                    oldRow.children()[3].textContent = data.fecha_lanzamiento;
 
                     if (nextRow.children().length) {
                         $(oldRow).insertBefore(nextRow);
@@ -148,6 +153,7 @@
 
         $('#albums_table > tbody').append(
             '<tr>' +
+            '<td></td>' +
             '<td><input id="nombre" name="nombre"/></td>' +
             '<td><input id="imagen" name="imagen"/></td>' +
             '<td><input id="fecha_lanzamiento" name="fecha_lanzamiento"/></td>' +
