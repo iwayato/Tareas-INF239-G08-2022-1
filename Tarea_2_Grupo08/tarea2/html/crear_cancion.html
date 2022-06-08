@@ -2,7 +2,7 @@
 
 <title>Tiwal - Crear canción</title> 
 
-<h1 id="title" class="p-3 ms-4">Crear canción</h1>
+<h2 id="title" class="p-3 ms-4">Crear canción</h2>
 
 <div class="container">
     <br/>
@@ -112,7 +112,7 @@
     {
         let id = curRow.attr('data-id');
         let nombre_cancion = curRow.children()[0].textContent;
-        if (confirm("Estas a punto de borrar " + nombre_cancion + " ¿Estas seguro?")) {
+        if (confirm("Estas a punto de borrar la canción" + nombre_cancion + " ¿Estas seguro?")) {
             $.ajax({
                 url: '../php/CRUD_canciones.php?id=' + id,
                 type: 'DELETE',

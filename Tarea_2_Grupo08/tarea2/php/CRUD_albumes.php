@@ -18,13 +18,17 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
 
         $sql = "
             SELECT 
-                id, nombre, letra, fecha_composicion
+                id, nombre, imagen, fecha_lanzamiento
             FROM 
-                canciones
+                album
+            INNER JOIN
+                album_tiene_cancion
+            ON
+                album.id = album_tiene_cancion.id_album
             INNER JOIN
                 artista_compuso_cancion
             ON
-                canciones.id = artista_compuso_cancion.id_cancion
+                album_tiene_cancion.id_cancion = artista_compuso_cancion.id_cancion
             WHERE
                 artista_compuso_cancion.id_artista = $id_persona
         ;";
@@ -40,21 +44,15 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
 
     case 'post':
 
-        $sql = "
-            WITH nueva_cancion as (
-                INSERT INTO canciones(nombre, letra, fecha_composicion) VALUES (:nombre, :letra, :fecha_composicion)
-                RETURNING id
-            )
-            INSERT INTO artista_compuso_cancion(id_artista, id_cancion) VALUES ($id_persona, (SELECT id FROM nueva_cancion))
-        ";
+        $sql = "INSERT INTO album(nombre, imagen, fecha_lanzamiento) VALUES (:nombre, :imagen, :fecha_lanzamiento);";
 
         $st = $db->prepare($sql);
 
         try {
             $st->execute([
                 'nombre' => $_POST['nombre'],
-                'letra' => $_POST['letra'],
-                'fecha_composicion' => $_POST['fecha_composicion'],
+                'imagen' => $_POST['imagen'],
+                'fecha_lanzamiento' => $_POST['fecha_lanzamiento'],
             ]);
 
             echo $db->lastInsertId();
@@ -70,7 +68,7 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
             die;
         }
 
-        $sql = "DELETE FROM canciones WHERE id = :id";
+        $sql = "DELETE FROM album WHERE id = :id";
 
         $st = $db->prepare($sql);
         
@@ -93,20 +91,20 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
 
         parse_str(file_get_contents('php://input'), $_POST);
 
-        if (empty($_POST['nombre']) || empty($_POST['letra']) || empty($_POST['fecha_composicion'])) {
+        if (empty($_POST['nombre']) || empty($_POST['imagen']) || empty($_POST['fecha_lanzamiento'])) {
             http_response_code(400);
 
             die;
         }
 
-        $sql = 'UPDATE canciones SET nombre = :nombre, letra = :letra, fecha_composicion = :fecha_composicion WHERE id = :id';
+        $sql = 'UPDATE album SET nombre = :nombre, imagen = :imagen, fecha_lanzamiento = :fecha_lanzamiento WHERE id = :id';
         $st = $db->prepare($sql);
 
         try {
             $st->execute([
                 'nombre' => $_POST['nombre'],
-                'letra' => $_POST['letra'],
-                'fecha_composicion' => $_POST['fecha_composicion'],
+                'imagen' => $_POST['imagen'],
+                'fecha_lanzamiento' => $_POST['fecha_lanzamiento'],
                 'id' => $id,
             ]);
             http_response_code(200);

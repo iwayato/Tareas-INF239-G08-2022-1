@@ -1,5 +1,184 @@
+<?php include '../include/navbar_crear_album.html'; ?>
 
+<title>Tiwal - Crear álbum</title> 
 
+<h2 id="title" class="p-3 ms-4">Crear álbum</h2>
+
+<!-- Tabla Contenedora de los Álbums -->
+<div class="container">
+    <br/>
+    <table id="albums_table" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Cover</th>
+            <th>Fecha Lanzamiento</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <button id="nuevo_album" class="btn btn-success">Nuevo Álbum</button>
+</div>
+
+<script type="application/javascript">
+    
+    // Función que añade filas a la tabla con los datos obtenidos (GET)
+    function addRecord(record) 
+    {
+        let albumsTableBody = $('#albums_table > tbody');
+
+        let newRow = 
+            '<tr data-id="' + record.id + '">' +
+            '   <td>' + record.nombre + '</td>' +
+            '   <td>' + record.imagen + '</td>' +
+            '   <td>' + record.fecha_lanzamiento + '</td>' +
+            '   <td><button class="btn btn-primary edit" onclick="editRecord($(this).closest(\'tr\'));">Editar</button></td>' +
+            '   <td><button class="btn btn-danger delete" onclick="deleteRecord($(this).closest(\'tr\'));">Borrar</button></td>' +
+            '</tr>';
+
+        albumsTableBody.append(newRow);
+    }
+
+    // Función que añade el contexto html para editar una fila (atributos de un álbum)
+    function getEditRow(curRow)
+    {
+        return '<tr data-id="' + curRow.attr('data-id') + '">' +
+            '<td><input id="nombre" name="nombre" value="' + curRow.children()[0].textContent + '"/></td>' +
+            '<td><input id="imagen" name="imagen" value="' + curRow.children()[1].textContent + '"/></td>' +
+            '<td><input id="fecha_lanzamiento" name="fecha_lanzamiento" value="' + curRow.children()[2].textContent + '"/></td>' +
+            '<td><button id="edit_confirm" class="btn btn-success">Confirmar</button></td>' +
+            '<td><button id="edit_cancel" class="btn btn-secondary">Cancelar</td>' +
+            '</tr>';
+    }
+
+    // PUT (actualizar atributos álbum)
+    function editRecord (curRow) 
+    {
+        let oldRow = curRow.clone();
+        let editRow = getEditRow(curRow);
+        let nextRow = curRow.next();
+        let albumsTableBody = $('#albums_table > tbody');
+
+        curRow.remove();
+        if (nextRow.children().length) {
+            $(editRow).insertBefore(nextRow);
+        } else {
+            albumsTableBody.append(editRow);
+        }
+
+        $('#edit_confirm').click(function () {
+            let curRow = $(this).closest('tr');
+            let id = curRow.attr('data-id');
+
+            let data = {
+                nombre: curRow.find('input[name="nombre"]').val(),
+                imagen: curRow.find('input[name="imagen"]').val(),
+                fecha_lanzamiento: curRow.find('input[name="fecha_lanzamiento"]').val(),
+            }
+
+            $.ajax('../php/CRUD_albumes.php?id=' + id, {
+                method: 'PUT',
+                data: data,
+                success: function() {
+                    curRow.remove();
+                    oldRow.children()[0].textContent = data.nombre;
+                    oldRow.children()[1].textContent = data.imagen;
+                    oldRow.children()[2].textContent = data.fecha_lanzamiento;
+
+                    if (nextRow.children().length) {
+                        $(oldRow).insertBefore(nextRow);
+                    } else {
+                        albumsTableBody.append(oldRow);
+                    }
+                },
+                error: function( jqXHR, textStatus, errorThrown ) {
+                    alert(errorThrown);
+                }
+            });
+        });
+
+        $('#edit_cancel').click(function () {
+
+            $(this).closest('tr').remove();
+
+            if (nextRow.children().length) {
+                oldRow.insertBefore(nextRow);
+            } else {
+                albumsTableBody.append(oldRow);
+            }
+        });
+    };
+
+    // DELETE (borrar un álbum)
+    function deleteRecord(curRow)
+    {
+        let id = curRow.attr('data-id');
+        let nombre_album = curRow.children()[0].textContent;
+        if (confirm("Estas a punto de borrar el álbum " + nombre_album + " ¿Estas seguro?")) {
+            $.ajax({
+                url: '../php/CRUD_albumes.php?id=' + id,
+                type: 'DELETE',
+                success: function (result) {
+                    curRow.remove();
+                },
+                error: function () {
+                    alert('Hubo un error en el servidor');
+                }
+            });
+        }
+    }
+
+    // GET (obtener los álbumes almacenados en la base de datos)
+    $(document).ready(function () {
+        $.get('../php/CRUD_albumes.php', function (resp) {
+            let results = JSON.parse(resp);
+
+            $.each(results, function (i, record) {
+                addRecord(record);
+            });
+        });
+    });
+
+    // POST (añadir un nuevo álbum a la base de datos)
+    $('#nuevo_album').click(function () {
+        $('#nuevo_album').prop('disabled', true);
+
+        $('#albums_table > tbody').append(
+            '<tr>' +
+            '<td><input id="nombre" name="nombre"/></td>' +
+            '<td><input id="imagen" name="imagen"/></td>' +
+            '<td><input id="fecha_lanzamiento" name="fecha_lanzamiento"/></td>' +
+            '<td><button id="confirm_new" class="btn btn-primary">Confirmar</button></td>' +
+            '<td><button id="cancel_new" class="btn btn-secondary">Cancelar</td>' +
+            '</tr>'
+        );
+
+        let newRow = $('#albums_table > tbody').children().last();
+
+        $('#confirm_new').click(function () {
+            let postData = {
+                nombre: $('#nombre').val(),
+                imagen: $('#imagen').val(),
+                fecha_lanzamiento: $('#fecha_lanzamiento').val()
+            };
+            $.post('../php/CRUD_albumes.php', postData, function(resp) {
+                newRow.remove();
+                postData.id = resp;
+                addRecord(postData);
+            });
+            $('#nuevo_album').prop('disabled', false);
+        });
+
+        $('#cancel_new').click(function () {
+            newRow.remove();
+            $('#nuevo_album').prop('disabled', false);
+        });
+    });
+    
+</script>
 
 </body>
 </html>
