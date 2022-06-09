@@ -12,7 +12,7 @@ try {
 
 $sql = "
     SELECT 
-        canciones.nombre AS nombre, compositores.nombre AS compositores, album.nombre as nombre_album
+        canciones.nombre AS nombre, canciones.fecha_composicion, canciones.letra, compositores.nombre AS compositores, album.nombre as nombre_album
     FROM 
         canciones
     INNER JOIN(

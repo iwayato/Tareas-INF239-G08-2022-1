@@ -30,7 +30,7 @@
             '   <td>' + record.nombre + '</td>' +
             '   <td>' + record.compositores + '</td>' +
             '   <td>' + record.nombre_album + '</td>' +
-            '   <td><a href="perfilcancion.html">Perfil Canción</a></td>' +
+            `   <td><a href="perfilcancion.html?nombre=${record.nombre}&compositores=${record.compositores}&nombre_album=${record.nombre_album}&fecha_composicion=${record.fecha_composicion}&letra=${record.letra}">Perfil Canción</a></td>` +
             '</tr>';
         songsTableBody.append(newRow);
     }
