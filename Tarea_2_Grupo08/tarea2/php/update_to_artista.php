@@ -6,6 +6,7 @@
     $nombre_artistico = filter_var($_POST['nombre_artistico'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $verificado = $_POST['verificado'];
     $id = $_SESSION["id_persona"];
+    $_SESSION['tipo_persona'] = "artista";
 
     if (empty($verificado)) {
         $sql = "UPDATE personas set nombre_artistico = '$nombre_artistico', verificado = false WHERE id = '$id';";

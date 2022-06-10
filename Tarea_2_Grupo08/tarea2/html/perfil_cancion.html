@@ -1,6 +1,7 @@
 <?php include '../include/navbar_perfil_cancion.html'; ?>
 
-<h1>Ponele tu magia Tomo</h1>
+<h2 id="title" class="p-3 ms-4">Perfil canción</h2>
+
 <?php
     $nombre = $_GET["nombre"];
     $compositores = $_GET["compositores"];
@@ -9,13 +10,52 @@
     $letra = $_GET["letra"];
 
     echo("
-        <div class='m-5'>
-            <ul class='list-group w-50'>
-            <li class='list-group-item'>$nombre</li>
-            <li class='list-group-item'>$compositores</li>
-            <li class='list-group-item'>$fecha_composicion</li>
-            <li class='list-group-item'>$nombre_album</li>
-            <li class='list-group-item'>$letra</li>
-            </ul>
-        </div>")
+        <section style='background-color: white;'>
+            <div class='container py-5'>
+                <div class='row'>
+                    <div class='card mb-4'>
+                        <div class='card-body'>
+
+                            <div class='card-body text-center'>
+                                <h5 class='my-3'>$nombre</h5>
+                                <p class='text-muted mb-4'>$compositores</p>
+                            </div>
+
+                            <div class='row'>
+                                <div class='col-sm-3'>
+                                    <p class='mb-0'>Letra</p>
+                                </div>
+                                <div class='col-sm-9'>
+                                    <p class='text-muted mb-0'>$letra</p>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class='row'>
+                                <div class='col-sm-3'>
+                                    <p class='mb-0'>Álbum</p>
+                                </div>
+                                <div class='col-sm-9'>
+                                    <p class='text-muted mb-0'>$nombre_album</p>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class='row'>
+                                <div class='col-sm-3'>
+                                    <p class='mb-0'>Fecha composición</p>
+                                </div>
+                                <div class='col-sm-9'>
+                                    <p class='text-muted mb-0'>$fecha_composicion</p>
+                                </div>
+                            </div>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    ")
 ?>  

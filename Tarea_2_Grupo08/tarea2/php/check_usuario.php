@@ -7,7 +7,7 @@
 
     }
     else{
-        exit("No tiene acceso a esta pagina");
+        exit("No tiene acceso a esta página");
     }
              
 ?>

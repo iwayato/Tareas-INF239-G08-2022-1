@@ -1,9 +1,9 @@
 <?php
 try {
     $host= 'localhost';
-    $db = 'postgres';
+    $db = 'Tarea2_BD';
     $user = 'postgres';
-    $password = 'Usm5615004k';
+    $password = 'iwayato';
     $dsn = "pgsql:host=$host;port=5432;dbname=$db;";
     $db = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     session_start();
@@ -16,22 +16,7 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
 {
     case 'get':
 
-        $sql = "
-            SELECT DISTINCT ON (id)
-                id, nombre, imagen, fecha_lanzamiento
-            FROM 
-                album
-            INNER JOIN
-                album_tiene_cancion
-            ON
-                album.id = album_tiene_cancion.id_album
-            INNER JOIN
-                artista_compuso_cancion
-            ON
-                album_tiene_cancion.id_cancion = artista_compuso_cancion.id_cancion
-            WHERE
-                artista_compuso_cancion.id_artista = $id_persona
-        ;";
+        $sql = "SELECT * FROM album";
 
         try {
             $st = $db->query($sql, PDO::FETCH_ASSOC);

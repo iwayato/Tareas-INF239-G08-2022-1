@@ -1,9 +1,9 @@
 <?php
 try {
     $host= 'localhost';
-    $db = 'postgres';
+    $db = 'Tarea2_BD';
     $user = 'postgres';
-    $password = 'Usm5615004k';
+    $password = 'iwayato';
     $dsn = "pgsql:host=$host;port=5432;dbname=$db;";
     $db = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     session_start();
@@ -17,7 +17,7 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
     case 'get':
 
         $sql = "
-                SELECT 
+            SELECT 
                 id, nombre, letra, fecha_composicion, album_tiene_cancion.id_album
             FROM 
                 canciones
@@ -30,7 +30,7 @@ switch (strtolower($_SERVER['REQUEST_METHOD']))
             ON
                 canciones.id = album_tiene_cancion.id_cancion
             WHERE
-                artista_compuso_cancion.id_artista = 24
+                artista_compuso_cancion.id_artista = $id_persona
         ;";
 
         try {

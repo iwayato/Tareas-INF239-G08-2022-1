@@ -10,7 +10,6 @@
         }
         else{
             header("Location: landpage.html");
-        }
-             
+        }  
     }
 ?>

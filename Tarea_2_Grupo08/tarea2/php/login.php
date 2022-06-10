@@ -26,6 +26,6 @@
         }
 
     } else {
-        echo("¡Error!");
+        header("Location: ../html/login.html?error=1");
     }
 ?>

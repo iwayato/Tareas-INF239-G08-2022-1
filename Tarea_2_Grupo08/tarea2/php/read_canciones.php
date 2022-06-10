@@ -1,9 +1,9 @@
 <?php
 try {
     $host= 'localhost';
-    $db = 'postgres';
+    $db = 'Tarea2_BD';
     $user = 'postgres';
-    $password = 'Usm5615004k';
+    $password = 'iwayato';
     $dsn = "pgsql:host=$host;port=5432;dbname=$db;";
     $db = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 } catch (PDOException $exception) {

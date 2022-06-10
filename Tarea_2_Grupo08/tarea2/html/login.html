@@ -6,11 +6,32 @@
     position: absolute;
     width: 600px;
     height: 285px;
-    top: calc(50% - 142.5px);
+    top: calc(30% - 142.5px);
     left: calc(50% - 300px)">
     <div class="card">
+        <script>
+            function GetURLParameter(sParam){
+                var sPageURL = window.location.search.substring(1);
+                var sURLVariables = sPageURL.split('&');
+                for (var i = 0; i < sURLVariables.length; i++) 
+                {
+                    var sParameterName = sURLVariables[i].split('=');
+                    if (sParameterName[0] == sParam) 
+                    {
+                        return sParameterName[1];
+                    }
+                }
+            }
+        
+            if (GetURLParameter("error") == 1) {
+                alert("Credenciales inválidas");
+            }
+        </script>
         <h5 class="card-header">Inicia Sesión</h5>
         <div class="card-body">
+            <div class="d-flex justify-content-center">
+                <img src="../img/login.png" width="400" height="350">
+            </div>
             <form action="../php/login.php" method="get">
                 <div class="mb-3">
                     <label for="email" class="form-label">Correo Electrónico</label>
@@ -33,6 +54,8 @@
         </div>
     </div>
 </div>
+
+
 
 </body>
 </html>
