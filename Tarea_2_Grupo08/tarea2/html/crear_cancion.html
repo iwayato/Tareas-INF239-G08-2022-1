@@ -47,7 +47,8 @@
         return '<tr data-id="' + curRow.attr('data-id') + '">' +
             '<td><input id="nombre" name="nombre" value="' + curRow.children()[0].textContent + '"/></td>' +
             '<td><input id="letra" name="letra" value="' + curRow.children()[1].textContent + '"/></td>' +
-            '<td><input id="fecha_composicion" name="fecha_composicion" value="' + curRow.children()[2].textContent + '"/></td>' +
+            '<td><input id="id_album" name="id_album" value="' + curRow.children()[2].textContent + '"/></td>' +
+            '<td><input id="fecha_composicion" name="fecha_composicion" value="' + curRow.children()[3].textContent + '"/></td>' +
             '<td><button id="edit_confirm" class="btn btn-success">Confirmar</button></td>' +
             '<td><button id="edit_cancel" class="btn btn-secondary">Cancelar</td>' +
             '</tr>';
@@ -83,8 +84,9 @@
                 success: function() {
                     curRow.remove();
                     oldRow.children()[0].textContent = data.nombre;
-                    oldRow.children()[1].textContent = data.letra;
-                    oldRow.children()[2].textContent = data.fecha_composicion;
+                    oldRow.children()[1].textContent = data.letra;                    
+                    oldRow.children()[2].textContent = data.id_album;
+                    oldRow.children()[3].textContent = data.fecha_composicion;
 
                     if (nextRow.children().length) {
                         $(oldRow).insertBefore(nextRow);
