@@ -149,23 +149,25 @@ def put_reproducciones():
 	json = request.get_json()
 	reproduccion = Reproducciones.create(
 		json['id_usuario'], 
-		json['id_cancion']
+		json['id_cancion'],
+		json['cantidad_reproducciones'],
+		json['ultima_reproduccion']
 	)
-	response = jsonify(reproduccion)
+	response = jsonify(reproduccion.json())
 	return response
 
-@app.route('/api/reproducciones/<id>', methods=['PUT'])
-def editar_reproducciones(id):
+@app.route('/api/reproducciones/<id_usuario>/<id_cancion>', methods=['PUT'])
+def editar_reproducciones(id_usuario, id_cancion):
 	json = request.get_json()
-	reproduccion = Reproducciones.query.filter_by(id=id).first()
-	reproduccion.id_usuario = json['id_usuario']
-	reproduccion.id_cancion = json['id_cancion']
+	reproduccion = Reproducciones.query.filter_by(id_usuario=id_usuario, id_cancion=id_cancion).first()
+	reproduccion.cantidad_reproducciones = json['cantidad_reproducciones']
+	reproduccion.ultima_reproduccion = json['ultima_reproduccion']
 	reproduccion.update()
 	return jsonify(reproduccion.json())
 
-@app.route('/api/reproducciones/<id>', methods=['DELETE'])
-def delete_reproduccion(id):
-    reproduccion = Reproducciones.query.filter_by(id=id).first()
+@app.route('/api/reproducciones/<id_usuario>/<id_cancion>', methods=['DELETE'])
+def delete_reproduccion(id_usuario, id_cancion):
+    reproduccion = Reproducciones.query.filter_by(id_usuario=id_usuario, id_cancion=id_cancion).first()
     reproduccion.delete()
     return jsonify({'Mensaje':'Reproducción borrada'})
 

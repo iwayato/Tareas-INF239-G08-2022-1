@@ -67,15 +67,18 @@ class Personas(db.Model):
 
 class Reproducciones(db.Model):
     __tablename__ = 'reproducciones'
-    id = db.Column(db.Integer, primary_key = True)
     id_usuario = db.Column(db.Integer, db.ForeignKey("personas.id"), primary_key = True)
     id_cancion = db.Column(db.Integer, db.ForeignKey("canciones.id"), primary_key = True)
+    cantidad_reproducciones = db.Column(db.Float, nullable = True)
+    ultima_reproduccion = db.Column(db.DateTime, nullable = True)
 
     @classmethod
-    def create(cls, id_usuario, id_cancion):
+    def create(cls, id_usuario, id_cancion, cantidad_reproducciones, ultima_reproduccion):
         reproduccion = Reproducciones(
             id_usuario = id_usuario,
-            id_cancion = id_cancion
+            id_cancion = id_cancion,
+            cantidad_reproducciones = cantidad_reproducciones,
+            ultima_reproduccion = ultima_reproduccion
         )
         return reproduccion.save()
 
@@ -100,9 +103,10 @@ class Reproducciones(db.Model):
 
     def json(self):
         return {
-            'id': self.id,
             'id_usuario': self.id_usuario,
-            'id_cancion': self.id_cancion
+            'id_cancion': self.id_cancion,
+            'cantidad_reproducciones': self.cantidad_reproducciones,
+            'ultima_reproduccion': self.ultima_reproduccion
         }
 
 class Facturas(db.Model):
