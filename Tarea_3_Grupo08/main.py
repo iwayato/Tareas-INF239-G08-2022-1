@@ -194,15 +194,18 @@ def get_morosos(id_usuario):
 @app.route('/api/facturas/deudaTotal')
 def get_deudaTotal():
 	facturas = [f.json() for f in Facturas.query.all()]
-	fechas_vencimiento = [(f['fecha_vencimiento'], f['monto_facturado']) for f in facturas]
-	factura_morosa = [((datetime.date.today() - f[0]).days, f[1]) for f in fechas_vencimiento]
+	fechas_vencimiento = [(f['fecha_vencimiento'], f['monto_facturado'], f['id']) for f in facturas]
+	factura_morosa = [((datetime.date.today() - f[0]).days, f[1], f[2]) for f in fechas_vencimiento]
 	response = {"qty_personas": 0, "qty_dinero": 0}
+	id_morosos = []
 
 	for f in factura_morosa:
 		if f[0] >= 1:
-			response['qty_personas'] = response['qty_personas'] + 1
+			if f[2] not in id_morosos:
+				id_morosos.append(f[2])
 			response['qty_dinero'] = response['qty_dinero'] + f[1]
-	
+
+	response['qty_personas'] = len(id_morosos)
 	return response
 
 
