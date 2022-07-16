@@ -1,7 +1,9 @@
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from config import config
 from models import db, Personas, Facturas, Canciones, Reproducciones
+import datetime
 
 def create_app(enviroment):
 	app = Flask(__name__)
@@ -170,6 +172,22 @@ def delete_reproduccion(id_usuario, id_cancion):
     reproduccion = Reproducciones.query.filter_by(id_usuario=id_usuario, id_cancion=id_cancion).first()
     reproduccion.delete()
     return jsonify({'Mensaje':'Reproducción borrada'})
+
+@app.route('/api/facturas/moroso/<id_usuario>', methods=['GET'])
+def get_morosos(id_usuario):
+	facturas_usuario = [factura.json() for factura in Facturas.query.filter_by(id_usuario=id_usuario)]
+	fechas_vencimiento = [(factura['fecha_vencimiento'], factura['id'], factura['monto_facturado'], factura['fecha_facturacion']) for factura in facturas_usuario]
+	delta = [((datetime.date.today() - fecha[0]).days, fecha[1], fecha[2], fecha[3], fecha[0]) for fecha in fechas_vencimiento]
+	response = {"mensaje": str(), "facturas": []}
+
+	for d in delta:
+		if d[0] >= 1:
+			response["mensaje"] = "El usuario tiene facturas vencidas"
+			response["facturas"].append({"id_factura": d[1], "montofacturado": d[2], "fecha_facturacion": d[3].strftime("%Y/%m/%d"), "fecha_vencimiento": d[4].strftime("%Y/%m/%d")})
+		else:
+			response["mensaje"] = "El usuario no tiene facturas vencidas"
+
+	return response
 
 if __name__ == '__main__':
 	app.run(debug=True)
