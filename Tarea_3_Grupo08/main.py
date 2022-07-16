@@ -173,6 +173,7 @@ def delete_reproduccion(id_usuario, id_cancion):
     reproduccion.delete()
     return jsonify({'Mensaje':'Reproducción borrada'})
 
+#EndPoint para identificar a morosos
 @app.route('/api/facturas/moroso/<id_usuario>', methods=['GET'])
 def get_morosos(id_usuario):
 	facturas_usuario = [factura.json() for factura in Facturas.query.filter_by(id_usuario=id_usuario)]
@@ -188,6 +189,22 @@ def get_morosos(id_usuario):
 			response["mensaje"] = "El usuario no tiene facturas vencidas"
 
 	return response
+
+#EndPoint para obtener deuda total de todas las personas morosas
+@app.route('/api/facturas/deudaTotal')
+def get_deudaTotal():
+	facturas = [f.json() for f in Facturas.query.all()]
+	fechas_vencimiento = [(f['fecha_vencimiento'], f['monto_facturado']) for f in facturas]
+	factura_morosa = [((datetime.date.today() - f[0]).days, f[1]) for f in fechas_vencimiento]
+	response = {"qty_personas": 0, "qty_dinero": 0}
+
+	for f in factura_morosa:
+		if f[0] >= 1:
+			response['qty_personas'] = response['qty_personas'] + 1
+			response['qty_dinero'] = response['qty_dinero'] + f[1]
+	
+	return response
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
