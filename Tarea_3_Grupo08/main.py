@@ -215,10 +215,10 @@ def get_ingresos():
 	response = {"qty_dinero": 0}
 
 	facturas = [f.json() for f in Facturas.query.all()]
-	info = [(f['monto_facturado'], f['fecha_hora_pago']) for f in facturas]
+	info = [(f['monto_facturado'], f['fecha_hora_pago'], f['estado']) for f in facturas]
 
 	for i in info:
-		if (fecha_consulta - i[1].date()).days <= 31:
+		if (fecha_consulta - i[1].date()).days <= 31 and i[2] == True:
 			response["qty_dinero"] = response["qty_dinero"] + i[0]
 
 	return response 
