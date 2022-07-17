@@ -208,6 +208,20 @@ def get_deudaTotal():
 	response['qty_personas'] = len(id_morosos)
 	return response
 
+#EndPoint que retorna los ingresos de la compañia en los últimos 31 días
+@app.route('/api/facturas/ingresos')
+def get_ingresos():
+	fecha_consulta = datetime.date.today()
+	response = {"qty_dinero": 0}
+
+	facturas = [f.json() for f in Facturas.query.all()]
+	info = [(f['monto_facturado'], f['fecha_hora_pago']) for f in facturas]
+
+	for i in info:
+		if (fecha_consulta - i[1].date()).days <= 31:
+			response["qty_dinero"] = response["qty_dinero"] + i[0]
+
+	return response 
 
 #EndPoint que retorna las 10 canciones más escuchadas por un usuario
 @app.route('/api/reproducciones/topSongs/<id_usuario>')
