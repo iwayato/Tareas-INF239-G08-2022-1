@@ -233,5 +233,29 @@ def get_top_canciones(id_usuario):
 
 	return response
 
+#EndPoint que retorna las 10 canciones más escuchadas globalmente
+@app.route('/api/reproducciones/topSongsGlobal')
+def get_top_canciones_global():
+	reproducciones = [r.json() for r in Reproducciones.query.all()]
+	datos_reproduccion = [(r['id_cancion'], r['cantidad_reproducciones']) for r in reproducciones]
+	pre_reponse = []
+	response = {"top_ten_global": []}
+
+	for d in datos_reproduccion:
+		cancion_fil = [c.json() for c in Canciones.query.filter_by(id = d[0])]
+		nombre_cancion = cancion_fil[0]['nombre']
+		pre_reponse.append((d[0], nombre_cancion, d[1]))
+	
+	pre_reponse.sort(key = lambda i:i[2], reverse = True)
+
+	for n in range(10):
+		response["top_ten_global"].append({
+			"id_cancion" : pre_reponse[n][0], 
+			"nombre_cancion" : pre_reponse[n][1],
+			"reproducciones" : pre_reponse[n][2]
+		})
+
+	return response
+
 if __name__ == '__main__':
 	app.run(debug=True)
