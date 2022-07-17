@@ -209,5 +209,29 @@ def get_deudaTotal():
 	return response
 
 
+#EndPoint que retorna las 10 canciones más escuchadas por un usuario
+@app.route('/api/reproducciones/topSongs/<id_usuario>')
+def get_top_canciones(id_usuario):
+	reproducciones = [r.json() for r in Reproducciones.query.filter_by(id_usuario=id_usuario)]
+	datos_reproduccion = [(r['id_cancion'], r['cantidad_reproducciones']) for r in reproducciones]
+	pre_reponse = []
+	response = {"top_ten": []}
+
+	for d in datos_reproduccion:
+		cancion_fil = [c.json() for c in Canciones.query.filter_by(id = d[0])]
+		nombre_cancion = cancion_fil[0]['nombre']
+		pre_reponse.append((d[0], nombre_cancion, d[1]))
+
+	pre_reponse.sort(key = lambda i:i[2], reverse = True)
+
+	for n in range(10):
+		response["top_ten"].append({
+			"id_cancion" : pre_reponse[n][0], 
+			"nombre_cancion" : pre_reponse[n][1],
+			"reproducciones" : pre_reponse[n][2]
+		})
+
+	return response
+
 if __name__ == '__main__':
 	app.run(debug=True)
