@@ -1,0 +1,63 @@
+<html>
+  <head>
+
+  </head>
+  <body>
+    <h1>Bienvenido a la API del Grupo 8</h1>
+    <img src="{{url_for('static', filename='Capibara.jpg')}}"/>
+    <h3>A continuación se ejemplifica el uso general de la API</h3>
+
+    <ul>
+        <li><h3>CRUD Tabla personas</h3></li>
+       		<ul>
+       			<li>GET y POST persona: <b>http:localhost/api/personas</b></li>
+      			<li>UPDATE y DELETE persona:   <b>http:localhost/api/personas/&ltid_persona&gt</b></li>
+       		</ul>
+    
+       	<li><h3>CRUD Tabla facturas</h3></li>
+       		<ul>
+       			<li>GET y POST factura: <b>http:localhost/api/facturas</b></li>
+      			<li>UPDATE y DELETE factura:   <b>http:localhost/api/facturas/&ltid_factura&gt</b></li>
+       		</ul>
+    
+       	<li><h3>CRUD Tabla canciones</h3></li>
+       		<ul>
+       			<li>GET y POST canción: <b>http:localhost/api/canciones</b></li>
+      			<li>UPDATE y DELETE canción:   <b>http:localhost/api/canciones/&ltid_cancion&gt</b></li>
+       		</ul>
+    
+       	<li><h3>CRUD Tabla reproducciones</h3></li>
+       		<ul>
+       			<li>GET y POST reproducción: <b>http:localhost/api/reproducciones</b></li>
+      			<li>UPDATE y DELETE reproducción:   <b>http:localhost/api/personas/&ltid_reproduccion&gt</b></li>
+       		</ul>
+    
+       	<li><h3>EndPoint Personas Morosas</h3></li>
+       		<ul>
+       			<li>GET: <b>http:localhost/api/facturas/moroso/&ltid_usuario&gt</b></li>
+       		</ul>
+    
+       	<li><h3>EndPoint Deuda Total</h3></li>
+       		<ul>
+       			<li>GET: <b>http:localhost/api/facturas/deudaTotal</b></li>
+       		</ul>
+    
+       	<li><h3>EndPoint Ingresos Último Mes</h3></li>
+       		<ul>
+       			<li>GET: <b>http:localhost/api/facturas/ingresos</b></li>
+       		</ul>
+    
+       	<li><h3>EndPoint Top 10 Canciones de un Usuario</h3></li>
+       		<ul>
+       			<li>GET: <b>http:localhost/api/reproducciones/topSongs/&ltid_usuario&gt</b></li>
+       		</ul>
+    
+       	<li><h3>EndPoint Top 10 Canciones a nivel Global</h3></li>
+       		<ul>
+       			<li>GET: <b>http:localhost/api/reproducciones/topSongsGlobal</b></li>
+       		</ul>
+       </ul>
+       
+  </body>
+
+</html>

@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, url_for
 # from flask_cors import CORS
 from config import config
 from models import db, Personas, Facturas, Canciones, Reproducciones
@@ -18,6 +18,11 @@ def create_app(enviroment):
 enviroment = config['development']
 app = create_app(enviroment)
 # CORS(app)
+
+# Homepage
+@app.route('/', methods=['GET'])
+def home():	
+	return render_template('/index.html')
 
 # CRUD para las personas
 @app.route('/api/personas', methods=['GET'])
