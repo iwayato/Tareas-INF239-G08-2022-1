@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Flask, jsonify, request
-from flask_cors import CORS
+# from flask_cors import CORS
 from config import config
 from models import db, Personas, Facturas, Canciones, Reproducciones
 import datetime
@@ -17,7 +17,7 @@ def create_app(enviroment):
 # Accedemos a la clase config del archivo config.py
 enviroment = config['development']
 app = create_app(enviroment)
-CORS(app)
+# CORS(app)
 
 # CRUD para las personas
 @app.route('/api/personas', methods=['GET'])
@@ -239,12 +239,15 @@ def get_top_canciones(id_usuario):
 	pre_reponse.sort(key = lambda i:i[2], reverse = True)
 
 	for n in range(10):
-		response["top_ten"].append({
+		try:
+			response["top_ten"].append({
 			"id_cancion" : pre_reponse[n][0], 
 			"nombre_cancion" : pre_reponse[n][1],
 			"reproducciones" : pre_reponse[n][2]
-		})
-
+			})
+		except:
+			break
+		
 	return response
 
 #EndPoint que retorna las 10 canciones más escuchadas globalmente
@@ -254,20 +257,32 @@ def get_top_canciones_global():
 	datos_reproduccion = [(r['id_cancion'], r['cantidad_reproducciones']) for r in reproducciones]
 	pre_reponse = []
 	response = {"top_ten_global": []}
+	songs = []
 
 	for d in datos_reproduccion:
 		cancion_fil = [c.json() for c in Canciones.query.filter_by(id = d[0])]
 		nombre_cancion = cancion_fil[0]['nombre']
-		pre_reponse.append((d[0], nombre_cancion, d[1]))
+		if nombre_cancion not in songs:
+			songs.append(nombre_cancion)
+			pre_reponse.append( {"nombre":nombre_cancion,"id": d[0],"#reproducciones": d[1]})
+		else:
+			for cancion in pre_reponse:
+				if nombre_cancion == cancion:
+					cancion["#reproducciones"] = cancion["#reproducciones"] + d[1]
+		
 	
-	pre_reponse.sort(key = lambda i:i[2], reverse = True)
+	pre_reponse.sort(key = lambda i:i["#reproducciones"], reverse = True)
+
 
 	for n in range(10):
-		response["top_ten_global"].append({
-			"id_cancion" : pre_reponse[n][0], 
-			"nombre_cancion" : pre_reponse[n][1],
-			"reproducciones" : pre_reponse[n][2]
+		try:
+			response["top_ten_global"].append({
+			"id_cancion" : pre_reponse[n]["id"], 
+			"nombre_cancion" : pre_reponse[n]["nombre"],
+			"reproducciones" : pre_reponse[n]["#reproducciones"]
 		})
+		except:
+			break
 
 	return response
 

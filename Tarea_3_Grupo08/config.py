@@ -5,7 +5,7 @@ class Config:
 class DevelopmentConfig(Config):
 	DEBUG = True
 	# Ingresamos credenciales para conexión a base de datos
-	SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:iwayato@localhost/tarea3'
+	SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Usm5615004k@localhost/tarea3'
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 config = {
