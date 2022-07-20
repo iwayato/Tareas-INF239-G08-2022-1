@@ -1,6 +1,7 @@
 from ast import Try
 from datetime import datetime
 from flask import Flask, jsonify, request, render_template, url_for
+from sqlalchemy import false, true
 # from flask_cors import CORS
 from config import config
 from models import db, Personas, Facturas, Canciones, Reproducciones
@@ -235,16 +236,15 @@ def delete_reproduccion(id_usuario, id_cancion):
 def get_morosos(id_usuario):
 	try:
 		facturas_usuario = [factura.json() for factura in Facturas.query.filter_by(id_usuario=id_usuario)]
-		fechas_vencimiento = [(factura['fecha_vencimiento'], factura['id'], factura['monto_facturado'], factura['fecha_facturacion']) for factura in facturas_usuario]
-		delta = [((datetime.date.today() - fecha[0]).days, fecha[1], fecha[2], fecha[3], fecha[0]) for fecha in fechas_vencimiento]
+		fechas_vencimiento = [(factura['fecha_vencimiento'], factura['id'], factura['monto_facturado'], factura['fecha_facturacion'], factura['estado']) for factura in facturas_usuario]
+		delta = [((datetime.date.today() - fecha[0]).days, fecha[1], fecha[2], fecha[3], fecha[0], fecha[4]) for fecha in fechas_vencimiento]
 		response = {"mensaje": str(), "facturas": []}
 
 		for d in delta:
-			if d[0] >= 1:
-				response["mensaje"] = "El usuario tiene facturas vencidas"
-				response["facturas"].append({"id_factura": d[1], "montofacturado": d[2], "fecha_facturacion": d[3].strftime("%Y/%m/%d"), "fecha_vencimiento": d[4].strftime("%Y/%m/%d")})
-			else:
-				response["mensaje"] = "El usuario no tiene facturas vencidas"
+				if (d[0] >= 1) & (~bool(d[5])):
+					response["mensaje"] = "El usuario tiene facturas vencidas"
+					response["facturas"].append({"id_factura": d[1], "montofacturado": d[2], "fecha_facturacion": d[3].strftime("%Y/%m/%d"), "fecha_vencimiento": d[4].strftime("%Y/%m/%d"), "this":d[5]})
+				
 
 		return response
 	except:
@@ -255,13 +255,13 @@ def get_morosos(id_usuario):
 def get_deudaTotal():
 	try:
 		facturas = [f.json() for f in Facturas.query.all()]
-		fechas_vencimiento = [(f['fecha_vencimiento'], f['monto_facturado'], f['id_usuario']) for f in facturas]
-		factura_morosa = [((datetime.date.today() - f[0]).days, f[1], f[2]) for f in fechas_vencimiento]
+		fechas_vencimiento = [(f['fecha_vencimiento'], f['monto_facturado'], f['id_usuario'], f['estado']) for f in facturas]
+		factura_morosa = [((datetime.date.today() - f[0]).days, f[1], f[2], f[3]) for f in fechas_vencimiento]
 		response = {"qty_personas": 0, "qty_dinero": 0}
 		id_morosos = []
 
 		for f in factura_morosa:
-			if f[0] >= 1:
+			if (f[0] >= 1) & (~bool(f[3])):
 				if f[2] not in id_morosos:
 					id_morosos.append(f[2])
 				response['qty_dinero'] = response['qty_dinero'] + f[1]
